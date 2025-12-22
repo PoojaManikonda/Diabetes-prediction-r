@@ -1,4 +1,4 @@
-# Instaling  packages
+# Installing  packages
 install.packages("caTools")
 install.packages("caret")
 install.packages("e1071")
@@ -9,8 +9,6 @@ library(readr)
 library(caTools)
 library(caret)
 library(e1071)
-
-
 
 data <- read.csv(file.choose())
 head(data) #first 6 rows of the dataset
@@ -26,14 +24,14 @@ prop.table(table(data$Outcome))
 #missing values
 colSums(is.na(data))
 
-#seperating features
+# separating features
 X <- data[, 1:8]
 y <- data[, 9]
 
 #Scaling the feature variables only to standardize their values (mean = 0, D = 1)
 scaled_X <- as.data.frame(scale(X))
 
-#Recombining the scaled features with target to form the final dataset
+#Recombining the scaled features with the target to form the final dataset
 
 scaled_data <- cbind(scaled_X, y)
 
@@ -171,3 +169,4 @@ if (any(prediction == 1)) {
 } else {
   cat("Based on the model's prediction, the risk of diabetes appears lower.")
 }
+
