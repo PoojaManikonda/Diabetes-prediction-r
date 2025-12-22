@@ -170,3 +170,92 @@ if (any(prediction == 1)) {
   cat("Based on the model's prediction, the risk of diabetes appears lower.")
 }
 
+#Model Optimization
+
+install.packages(c("pROC", "reshape2","caret", "glmnet"))
+library(pROC)
+library(glmnet)
+library(reshape2)
+library(caret)
+
+data <- read.csv(file.choose())
+head(data)
+str(data)
+
+#Label Encoding
+data$Outcome <- factor(data$Outcome, levels = c(0, 1), labels = c("No", "Yes"))
+table(data$Outcome)
+prop.table(table(data$Outcome))
+
+#Train-test split(70/30 stratified)
+set.seed(123)
+idx <- createDataPartition(data$Outcome, p = 0.7, list = FALSE)
+train <- data[idx, ]
+test  <- data[-idx, ]
+
+# Preprocess: center & scale predictors using TRAIN only ----
+# Identify predictor columns
+predictor_cols <- setdiff(names(train), "Outcome")
+
+preproc <- preProcess(train[, predictor_cols], method = c("center", "scale"))
+train_pp <- predict(preproc, train)
+test_pp  <- predict(preproc, test)
+
+# Correlation heatmap (numeric only)
+data_num <- train_pp[sapply(train_pp, is.numeric)]
+correlation_matrix <- cor(data_num, use = "complete.obs")
+correlation_melted <- melt(correlation_matrix)
+
+
+ggplot(correlation_melted, aes(Var1, Var2, fill = value)) +
+  geom_tile(color = "white") +
+  scale_fill_gradient2(low = "blue", high = "red", mid = "white",
+                       midpoint = 0, limit = c(-1, 1),
+                       name = "Correlation") +
+  theme_minimal() +
+  theme(axis.text.x = element_text(angle = 45, hjust = 1)) +
+  labs(title = "Correlation Heatmap", x = "Features", y = "Features")
+
+#TrainControl with SMOTE + ROC optimization 
+# sampling="smote" applies SMOTE inside resampling 
+
+ctrl_smote <- trainControl(
+  method = "repeatedcv",
+  number = 5,
+  repeats = 3,
+  sampling = "smote",
+  classProbs = TRUE,
+  summaryFunction = twoClassSummary,
+  savePredictions = "final"
+)
+
+#Train optimized Logistic Regression (glmnet) 
+
+
+set.seed(123)
+glmnet_model <- train(
+  Outcome ~ .,
+  data = train_pp,
+  method = "glmnet",
+  metric = "ROC",
+  trControl = ctrl_smote,
+  tuneLength = 20
+)
+
+print(glmnet_model)
+plot(glmnet_model)
+
+#Model evaluation
+# Class predictions
+pred_class <- predict(glmnet_model, newdata = test_pp)
+cm <- confusionMatrix(pred_class, test_pp$Outcome, positive = "Yes")
+print(cm)
+
+# Probabilities for ROC/AUC
+pred_prob <- predict(glmnet_model, newdata = test_pp, type = "prob")[, "Yes"]
+
+roc_obj <- roc(response = test_pp$Outcome, predictor = pred_prob, levels = c("No", "Yes"))
+print(auc(roc_obj))
+
+plot(roc_obj, main = "ROC Curve - glmnet (SMOTE via caret)")
+
