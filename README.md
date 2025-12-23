@@ -1,7 +1,7 @@
 # Diabetes Prediction using R
 
 ## 📌 Project Overview
-This project predicts the likelihood of a person having diabetes using clinical and demographic data.
+This project predicts the likelihood of a person having diabetes risk using clinical and demographic data.
 The analysis was conducted in R using statistical and machine learning techniques.
 
 ## 📊 Dataset
@@ -28,13 +28,6 @@ The analysis was conducted in R using statistical and machine learning technique
 - Optimized logistic regression using regularization (glmnet)
 - Model evaluation using confusion matrix and ROC–AUC
 
-## 📈 Model Performance
-- Accuracy: 75.6%
-- Sensitivity (Recall – Diabetes): 73.8%
-- Specificity: 76.7%
-- Balanced Accuracy: 75.2%
-- ROC–AUC: 0.84
-
 ## 🛠️ Tools & Technologies
 - R
 - RStudio
@@ -46,8 +39,9 @@ The analysis was conducted in R using statistical and machine learning technique
 - pROC
 
 ## 📈 Results
-The logistic regression model was able to predict the chances of a person having Diabetes when clinical parameters such as pregnancy, glucose, blood pressure, BMI, age, and diabetes pedigree function are provided. However, further model optimization and data balancing techniques could improve the sensitivity/recall towards identifying diabetic patients.
-## Confusion Matrix
+The logistic regression model was able to predict the chances of a person having Diabetes when clinical parameters such as pregnancy, glucose, blood pressure, BMI, age, and diabetes pedigree function are provided. However, further model optimization and data balancing techniques improve the model's performance towards identifying diabetes risk patients.
+
+## Confusion Matrix before optimization
             Reference
 Prediction   0    1
          0  127  37
@@ -75,7 +69,37 @@ Prediction   0    1
 
 ## 📈 Model Optimization and Performance
 
-Class imbalance in the outcome variable was addressed using SMOTE. The regularized logistic regression model achieved an accuracy of 75.6% (but with a slight drop in sensitivity from  84.7% to 73.8%) and an Area Under the ROC Curve (AUC) of 0.84, indicating strong discriminative ability between diabetic and non-diabetic individuals.
+Before optimization, the logistic regression model demonstrated high sensitivity but low specificity, indicating bias toward the majority class and reducedbalanced accuracy (69.2%).
+
+Class imbalance is addressed using SMOTE within cross-validation, and the model is optimized using ROC-AUC. Logistic regression is also regularized to reduce overfitting and improve generalization. As a result, balanced accuracy is improved from 73.9% to 75.6%, with notable gains in specificity(53.8% to 76.7%) and AUC value of 0.84. Therefore, the optimized model reduced false negative predictions and achieved more reliable performance for diabetes risk screening.
+
+## Confusion Matrix and Statistics
+
+          Reference
+Prediction  No Yes
+       No  115  21
+       Yes  35  59
+                                          
+               Accuracy : 0.7565          
+                 95% CI : (0.6958, 0.8105)
+    No Information Rate : 0.6522          
+    P-Value [Acc > NIR] : 0.000421        
+                                          
+                  Kappa : 0.4844          
+                                          
+ McNemar's Test P-Value : 0.082352        
+                                          
+            Sensitivity : 0.7375          
+            Specificity : 0.7667          
+         Pos Pred Value : 0.6277          
+         Neg Pred Value : 0.8456          
+             Prevalence : 0.3478          
+         Detection Rate : 0.2565          
+   Detection Prevalence : 0.4087          
+      Balanced Accuracy : 0.7521          
+                                          
+       'Positive' Class : Yes  
+Area under the curve: 0.8422
 
 ## 📁 Files in this Repository
 - `Diabetes_prediction.R` – Complete R script
@@ -94,7 +118,7 @@ published on GeeksforGeeks titled *“Diabetes Prediction using R”*.
 The project was executed step-by-step to strengthen the practical understanding of healthcare data preprocessing, exploratory
 analysis, class balancing, and predictive modeling.
 
-All code was executed, interpreted, and adapted independently for learning and
+All code was executed, interpreted, and further evaluated independently for improvements, learning, and
 portfolio demonstration purposes.
 
 Reference:
