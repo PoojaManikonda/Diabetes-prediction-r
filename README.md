@@ -42,10 +42,10 @@ The analysis was conducted in R using statistical and machine learning technique
 The logistic regression model was able to predict the chances of a person having Diabetes when clinical parameters such as pregnancy, glucose, blood pressure, BMI, age, and diabetes pedigree function are provided. However, further model optimization and data balancing techniques improve the model's performance towards identifying diabetes risk patients.
 
 ## Confusion Matrix before optimization
-            Reference
-Prediction   0    1
-         0  127  37
-         1  23   43
+True Positives (Diabetes detected)	43,	
+False Negatives (Missed diabetes)	  37,	
+True Negatives	                   127,	
+False Positives                     23  
                                           
                Accuracy: 0.7391          
                  95% CI: (0.6773, 0.7946)
@@ -75,30 +75,30 @@ Class imbalance is addressed using SMOTE within cross-validation, and the model 
 
 ## Confusion Matrix and Statistics
 
-          Reference
-Prediction  No Yes
-       No  115  21
-       Yes  35  59
-                                          
+True Positives (Diabetes detected)	59,
+False Negatives (Missed diabetes)	  21 ↓,
+True Negatives	                   115,
+False Positives                     35
+
                Accuracy : 0.7565          
                  95% CI : (0.6958, 0.8105)
     No Information Rate : 0.6522          
     P-Value [Acc > NIR] : 0.000421        
                                           
-                  Kappa : 0.4844          
+                  Kappa: 0.4844          
                                           
- McNemar's Test P-Value : 0.082352        
+ McNemar's Test P-Value: 0.082352        
                                           
-            Sensitivity : 0.7375          
-            Specificity : 0.7667          
-         Pos Pred Value : 0.6277          
+            Sensitivity: 0.7375          
+            Specificity: 0.7667          
+         Pos Pred Value: 0.6277          
          Neg Pred Value : 0.8456          
-             Prevalence : 0.3478          
-         Detection Rate : 0.2565          
-   Detection Prevalence : 0.4087          
-      Balanced Accuracy : 0.7521          
+             Prevalence: 0.3478          
+         Detection Rate: 0.2565          
+   Detection Prevalence: 0.4087          
+      Balanced Accuracy: 0.7521          
                                           
-       'Positive' Class : Yes  
+       'Positive' Class: Yes  
 Area under the curve: 0.8422
 
 ## 📁 Files in this Repository
